@@ -1,14 +1,14 @@
 package org.ocp;
 
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 
-public class UnitTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//    @Test
-    public void test() {
-//        assertEquals(2, 1 + 1);
-        System.out.println("Test");
+class UnitTest {
+
+    @Test
+    void test() {
+        assertEquals(2, 1 + 1);
     }
 
 }

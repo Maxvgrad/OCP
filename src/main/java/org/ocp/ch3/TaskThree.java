@@ -1,15 +1,17 @@
 package org.ocp.ch3;
 
-import jdk.internal.util.Preconditions;
 import org.ocp.Task;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
+import java.util.RandomAccess;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class TaskThree implements Task {
     @Override
@@ -65,7 +67,7 @@ public class TaskThree implements Task {
 
             Arrays.copyOfRange(new int[]{2, 3, 5}, -1, Integer.MAX_VALUE);
 
-        } catch (IllegalArgumentException e ) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 
@@ -84,10 +86,9 @@ public class TaskThree implements Task {
         System.out.println(new ArrayList<>().subList(0, 0) instanceof RandomAccess);
 
 
-
         List<String> ll = Arrays.asList("zero", "one", "two", "three", "four", "five", "six");
 
-        List<String> subList =  ll.subList(1, 5);
+        List<String> subList = ll.subList(1, 5);
 
         System.out.println("Is it ListIterator? " + (subList.iterator() instanceof ListIterator));
         ListIterator<String> li = (ListIterator<String>) subList.iterator();
@@ -110,19 +111,17 @@ public class TaskThree implements Task {
 //        }, 10000, "hello", "William", "Doe");
 
         reproduceBug6260652(new String[0]);
-        int[] intArr = new int[] {1, 2, 3,4, 6};
+        int[] intArr = new int[]{1, 2, 3, 4, 6};
 
         int[] intArr2 = Arrays.copyOf(intArr, 4);
 
         System.out.println(intArr == intArr2);
         System.out.println(intArr.length);
         System.out.println(intArr2.length);
-        System.out.println(Arrays.compare(intArr, intArr2));
 
         System.arraycopy(intArr, 0, intArr2, 0, 4);
-        System.out.println(Arrays.compare(intArr, intArr2));
 
-        Integer[] arrInteger = new Integer[] {1, 3, 4, 5, 7,};
+        Integer[] arrInteger = new Integer[]{1, 3, 4, 5, 7,};
 
 //        arrInteger = intArr;
 
@@ -143,9 +142,7 @@ public class TaskThree implements Task {
 
         System.out.println(listOne.size());
 
-        Preconditions.checkIndex(3,3,null);
     }
-
 
 
     static <T> void test() {
@@ -156,6 +153,7 @@ public class TaskThree implements Task {
         System.out.println(input);
         return input;
     }
+
     static void readList(List<Object> objects) {
         //System.out.println(objects.get(0));
         //Object o = objects.get(0);
@@ -181,6 +179,7 @@ public class TaskThree implements Task {
     }
 
     private static class User {}
+
     private static class Admin extends User {}
 
     private static String propperToString(Collection collection) {
@@ -188,36 +187,40 @@ public class TaskThree implements Task {
         Iterator i = collection.iterator();
         StringBuilder sb = new StringBuilder();
 
-        if (!i.hasNext())
+        if (!i.hasNext()) {
             return sb.append("[]").toString();
+        }
 
         sb.append("[");
 
-        for (;;) {
+        for (; ; ) {
             Object o = i.next();
 
             sb.append(o == collection ? "(this collection)" : o);
 
-            if (!i.hasNext())
+            if (!i.hasNext()) {
                 return sb.append("]").toString();
+            }
 
             sb.append(", ");
 
         }
     }
 
-    private static <T, V> void checkMethodAddPerormance(T collection, BiFunction<T, V, Long> biF, int numOfIterations, V... values) {
+    private static <T, V> void checkMethodAddPerormance(T collection, BiFunction<T, V, Long> biF, int numOfIterations,
+                                                        V... values) {
         Objects.requireNonNull(collection);
         Objects.requireNonNull(values);
-        if (numOfIterations < 0)
+        if (numOfIterations < 0) {
             numOfIterations = 10;
+        }
         final int vSize = values.length;
         V value = null;
-        for(int i = 0; i < numOfIterations; ) {
+        for (int i = 0; i < numOfIterations; ) {
             value = values[i % vSize];
             long time = biF.apply(collection, value);
             System.out.printf("Time %d ns.,\tIter: %d, Val: %s\n",
-                    time, ++i, value);
+                              time, ++i, value);
         }
     }
 
