@@ -1,10 +1,10 @@
 package org.ocp.ср1;
 
-import org.ocp.Task;
+import org.ocp.Question;
 
-public class TaskOne implements Task {
+public class QuestionOne implements Question {
 
-    private String task = "Task one";
+    private String task = "Question one";
 
     private String testLocalInnerClass = "Hello i'm local inner class";
 
@@ -40,7 +40,7 @@ public class TaskOne implements Task {
     }
 
     @Override
-    public void execute() {
+    public void ask() {
 
 //      Virtual method invocation
         Car car = new ElectricCar();
@@ -94,7 +94,7 @@ public class TaskOne implements Task {
 
 //        CREATING NESTED CLASSES
 
-        MemberInnerClass memberInnerClass = new TaskOne().getInnerMemeberInstance();
+        MemberInnerClass memberInnerClass = new QuestionOne().getInnerMemeberInstance();
         memberInnerClass.showTask();
         memberInnerClass.testLocalInnerClass();
 

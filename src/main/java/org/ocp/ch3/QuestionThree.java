@@ -1,6 +1,6 @@
 package org.ocp.ch3;
 
-import org.ocp.Task;
+import org.ocp.Question;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.function.BiFunction;
 
-public class TaskThree implements Task {
+public class QuestionThree implements Question {
     @Override
-    public void execute() throws Exception {
+    public void ask() throws Exception {
         test();
-        TaskThree.<String>testStrangSyntax("String1");
+        QuestionThree.<String>testStrangSyntax("String1");
 
         readList(new ArrayList<>());
 //        readList(new ArrayList<String>());

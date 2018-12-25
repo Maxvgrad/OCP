@@ -1,12 +1,12 @@
 package org.ocp.ch2;
 
-import org.ocp.Task;
+import org.ocp.Question;
 
 import java.util.function.BiFunction;
 
-public class TaskTwo implements Task {
+public class QuestionTwo implements Question {
     @Override
-    public void execute() throws Exception {
+    public void ask() throws Exception {
         System.out.println(multiply(2, 4, (a, b) -> a*b));
         System.out.println(multiply(2, 5, (a, b) -> { return a*b; }));
 
