@@ -2,12 +2,12 @@ package org.ocp.dto;
 
 public class PersonDto {
     private static int count = 0;
-    private String id;
+    private int id;
     private String interest;
 
     public PersonDto(String interest) {
         this.interest = interest;
-        this.id = "" + ++count;
+        this.id = ++count;
     }
 
     private PersonDto() {
@@ -22,8 +22,12 @@ public class PersonDto {
         this.interest = interest;
     }
 
-    public String toString() {
+    public int getId() {
         return id;
+    }
+
+    public String toString() {
+        return id+"";
     }
 
     public static Builder builder() {
