@@ -1,8 +1,13 @@
 package org.ocp.collections;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.TreeSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TreeSetQuestionTest {
@@ -37,7 +42,20 @@ class TreeSetQuestionTest {
      * level requirement and not a language level requirement. So the program compiles fine without any warning.
      * */
     @Test
+    @Tag("ch3")
     void addPersonNotImplementComparable() {
         assertThrows(ClassCastException.class, () -> treeSetQuestion.add(new Person("MATH")));
     }
+
+    @Test
+    @DisplayName("#ceiling(): Returns the least key greater than or equal to the given key")
+    @Tag("ch3")
+    void ceilingTest() {
+        TreeSet<String> tree = new TreeSet<>();
+        tree.add("one");
+        tree.add("One");
+        tree.add("ONE");
+        assertEquals("One", tree.ceiling("One"));
+    }
+
 }
