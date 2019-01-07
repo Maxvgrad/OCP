@@ -1,11 +1,12 @@
 package org.ocp.generics;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -53,9 +54,20 @@ public class GenericsTest {
     void inheritanceTest() {
         //processNumbers(new ArrayList<Integer>());
         processSuperNumbers(new ArrayList<Integer>());
+        processNumbers(Collections.emptyList());
     }
 
     private void processNumbers(List<Number> numbers) {}
 
     private void processSuperNumbers(List<? extends Number> numbers) {}
+
+    @Test
+    @Tag("ch3")
+    @DisplayName("Unbounded Wildcards")
+    void unboundedWildCard() {
+        List<?> list = new ArrayList<>();
+        //list.add(new Object());
+        list.add(null);
+        assertEquals(1, list.size());
+    }
 }
