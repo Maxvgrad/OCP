@@ -1,6 +1,7 @@
 package org.ocp.streams;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.ocp.dto.PersonDto;
 
@@ -9,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -128,5 +133,37 @@ class StreamTest {
               .peek(System.out::print)
               .limit(5)
               .forEach(System.out::print);
+    }
+
+    @Test
+    @Tag("ch4")
+    void averageTest() {
+        OptionalDouble averageOpt = Stream.of(4, 4, 5, 3).mapToInt(x -> x).average();
+        assertEquals(4.0, averageOpt.orElse(-1));
+    }
+
+    @Test
+    @Tag("ch4")
+    void ofDoubleStream() {
+        DoubleStream doubleStream = DoubleStream.of(3, 4.0);
+        assertEquals(2, doubleStream.count());
+    }
+
+    @Test
+    @Tag("ch4")
+    void divisionTest() {
+        DoubleStream.iterate(1, n -> n / 2).limit(10).forEach(System.out::println);
+    }
+
+    @Test
+    void randomClassTest() {
+        assertEquals(IntStream.empty().getClass(), new Random().ints().getClass());
+    }
+
+    @Test
+    void rangeAndClosedRangeTest() {
+        assertEquals(10, IntStream.range(0, 10).count());
+        assertEquals(11, IntStream.rangeClosed(0, 10).count());
+        assertEquals(IntStream.rangeClosed(0, 10).getClass(), IntStream.empty().getClass());
     }
 }
