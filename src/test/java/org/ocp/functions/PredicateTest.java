@@ -30,7 +30,7 @@ class PredicateTest {
     @Tag("ch4")
     void notTest() {
         List<Integer> result = Arrays.asList(1, 10, 5, 3).stream()
-                                                     .filter(Predicate.not(evenNum))
+//                                                     .filter(Predicate.not(evenNum))
                                                      .collect(Collectors.toList());
 
         assertEquals(3, result.size());

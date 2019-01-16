@@ -40,4 +40,15 @@ class StringUtilsTest {
                 .truncate("Roses are red that much is true. But violets are purple not freaking blue.",33, 41);
         assertEquals("But violets are purple not freaking blue.", truncated);
     }
+
+    @Test
+    void stripCompareWithTrimTest() {
+        String testStr = "  Roses ";
+        assertEquals(testStr.trim(), StringUtils.strip(testStr));
+    }
+
+    @Test
+    void t() {
+        //StringUtils.
+    }
 }

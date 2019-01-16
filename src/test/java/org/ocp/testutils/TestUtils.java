@@ -1,4 +1,4 @@
-package org.ocp.utils;
+package org.ocp.testutils;
 
 import org.ocp.dto.PersonDto;
 

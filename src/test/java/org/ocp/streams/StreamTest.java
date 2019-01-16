@@ -8,19 +8,23 @@ import org.ocp.dto.PersonDto;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.ocp.utils.TestUtils.buildPerson;
+import static org.ocp.testutils.TestUtils.buildPerson;
 
 class StreamTest {
 
@@ -58,8 +62,8 @@ class StreamTest {
     @Test
     void reduceThreeArgTest() {
         Integer sumOfPersonId = Stream.of(buildPerson(), buildPerson(), buildPerson(), buildPerson())
-                                             .reduce(0, (ident, person) -> ident + person.getId(), Math::addExact);
-        assertEquals(Integer.valueOf(10), sumOfPersonId);
+                                      .reduce(0, (ident, person) -> ident + person.getId(), Math::addExact);
+        assertEquals(Integer.valueOf(42), sumOfPersonId);
     }
 
     @Test
@@ -74,7 +78,7 @@ class StreamTest {
     void collectArgs() {
         List<Integer> personIdList = Stream.of(buildPerson(), buildPerson(), buildPerson(), buildPerson()).map(
                 PersonDto::getId).sorted().collect(Collectors.toCollection(ArrayList::new));
-        assertEquals(Integer.valueOf(1), personIdList.get(0));
+        assertEquals(Integer.valueOf(5), personIdList.get(0));
     }
 
     @Test
@@ -165,5 +169,49 @@ class StreamTest {
         assertEquals(10, IntStream.range(0, 10).count());
         assertEquals(11, IntStream.rangeClosed(0, 10).count());
         assertEquals(IntStream.rangeClosed(0, 10).getClass(), IntStream.empty().getClass());
+    }
+
+    @Test
+    @Tag("ch4")
+    void intSummaryStatistics() {
+        IntSummaryStatistics statistics = IntStream.of(1, 3, 4, 5, 8).summaryStatistics();
+        assertEquals(8, statistics.getMax());
+        assertEquals(1, statistics.getMin());
+        assertEquals(21, statistics.getSum());
+        assertEquals(4.2, statistics.getAverage());
+        assertEquals(5, statistics.getCount());
+    }
+
+    @Test
+    @Tag("ch4")
+    void longSummaryStatistics() {
+        LongSummaryStatistics statistics = LongStream.of(1, 3, 4, 5, 8).summaryStatistics();
+        assertEquals(8, statistics.getMax());
+        assertEquals(1, statistics.getMin());
+        assertEquals(21, statistics.getSum());
+        assertEquals(4.2, statistics.getAverage());
+        assertEquals(5, statistics.getCount());
+    }
+
+    @Test
+    @Tag("ch4")
+    void doubleSummaryStatistics() {
+        DoubleSummaryStatistics statistics = DoubleStream.of(1.0, 3D, 4D, 5.0, 8).summaryStatistics();
+        assertEquals(8, statistics.getMax());
+        assertEquals(1, statistics.getMin());
+        assertEquals(21, statistics.getSum());
+        assertEquals(4.2, statistics.getAverage());
+        assertEquals(5, statistics.getCount());
+    }
+
+    @Test
+    @Tag("ch4")
+    void listTest() {
+        List<String> cats = new ArrayList<>();
+        cats.add("Joe");
+        cats.add("Jon");
+        Stream<String> catsStram = cats.stream();
+        cats.add("Moe");
+        assertEquals(3, catsStram.count());
     }
 }

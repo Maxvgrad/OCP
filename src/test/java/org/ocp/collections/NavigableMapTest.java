@@ -3,7 +3,7 @@ package org.ocp.collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.ocp.dto.PersonDto;
-import org.ocp.utils.TestUtils;
+import org.ocp.testutils.TestUtils;
 
 import java.util.Collections;
 import java.util.Map;
