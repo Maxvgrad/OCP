@@ -27,7 +27,7 @@ class LocaleTest {
 
     @Test
     void localConstructorConventionOneArg() {
-        Locale locale = new Locale("hi");
-        assertEquals("hi", locale.toString());
+        Locale locale = new Locale("fr");
+        assertEquals("fr", locale.toString());
     }
 }
