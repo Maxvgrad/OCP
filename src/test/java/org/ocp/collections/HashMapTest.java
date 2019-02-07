@@ -40,7 +40,7 @@ public class HashMapTest {
     @DisplayName("")
     @Tag("ch3")
     void notSuchMethodAddTest() {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(4);
         //map.add("key", "value");
     }
 

@@ -1,4 +1,4 @@
-package org.oca;
+package org.oca.operations.equation;
 
 public interface Equation<T> {
 

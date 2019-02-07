@@ -1,8 +1,8 @@
 package org.oca.operations;
 
 import org.junit.jupiter.api.Test;
-import org.oca.Equation;
-import org.oca.EquationFactory;
+import org.oca.operations.equation.Equation;
+import org.oca.operations.equation.EquationFactory;
 
 class BitWiseOperatorsTest {
 
@@ -26,15 +26,15 @@ class BitWiseOperatorsTest {
     @Test
     void bitwiseXor() {
         Equation<Integer> eq = EquationFactory.getBitwiseXor();
-        eq.calculate(3, 4);
-        eq.calculate(1, 6);
-        eq.calculate(7, 1);
-        eq.calculate(Integer.MIN_VALUE, 2018);
+        eq.calculate(0, 0);
+        eq.calculate(0, 1);
+        eq.calculate(1, 0);
+        eq.calculate(1, 1);
     }
 
     @Test
     void leftShiftUnsigned() {
-        Equation<Integer> eq = EquationFactory.getLeftShiftUnsigned();
+        Equation<Integer> eq = EquationFactory.getLeftShiftSigned();
         eq.calculate(3, 4);
         eq.calculate(1, 6);
         eq.calculate(7, 1);
@@ -44,7 +44,7 @@ class BitWiseOperatorsTest {
 
     @Test
     void rightShiftUnsigned() {
-        Equation<Integer> eq = EquationFactory.getRightShiftUnsigned();
+        Equation<Integer> eq = EquationFactory.getRightShiftSigned();
         eq.calculate(3, 4);
         eq.calculate(1, 6);
         eq.calculate(7, 1);
@@ -53,7 +53,7 @@ class BitWiseOperatorsTest {
 
     @Test
     void rightShiftSigned() {
-        Equation<Integer> eq = EquationFactory.getRightShiftSigned();
+        Equation<Integer> eq = EquationFactory.getRightShiftUnsigned();
         eq.calculate(3, 1);
         eq.calculate(2, 6);
         eq.calculate(1, 4);
@@ -85,5 +85,7 @@ class BitWiseOperatorsTest {
         eq.calculate(Integer.MAX_VALUE/512, 4);
         eq.calculate(Integer.MAX_VALUE/1024, 4);
     }
+
+
 }
 

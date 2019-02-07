@@ -1,4 +1,6 @@
-package org.oca;
+package org.oca.operations.equation;
+
+import org.oca.operations.operator.Operator;
 
 public abstract class BaseEquation<T extends Number> implements Equation<T> {
 

@@ -1,4 +1,4 @@
-package org.oca;
+package org.oca.operations.operator;
 
 public class OperatorFactory {
 
@@ -8,7 +8,6 @@ public class OperatorFactory {
 
     private static final Operator<Integer> SHIFT_LEFT_UNSIGNED = Operator.of((a, b) -> a << b, "<<");
     private static final Operator<Integer> SHIFT_RIGHT_UNSIGNED = Operator.of((a, b) -> a >> b, ">>");
-    private static final Operator<Integer> SHIFT_RIGHT_SIGNED = Operator.of((a, b) -> a >>> b, ">>>");
 
     public static  Operator<Integer> getAndBitwise() {
         return AND_BITWISE;
@@ -26,11 +25,11 @@ public class OperatorFactory {
         return SHIFT_LEFT_UNSIGNED;
     }
 
-    public static  Operator<Integer> getRightShiftUnsigned() {
+    public static  Operator<Integer> getRightShiftSigned() {
         return SHIFT_RIGHT_UNSIGNED;
     }
 
-    public static  Operator<Integer> getRightShiftSigned() {
-        return SHIFT_RIGHT_SIGNED;
+    public static  Operator<Integer> getRightShiftUnsi() {
+        return Operator.of((a, b) -> a >>> b, ">>>");
     }
 }
