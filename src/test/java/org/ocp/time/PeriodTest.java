@@ -31,5 +31,18 @@ class PeriodTest {
         assertEquals("11:22", TIME_FORMATTER.format(ldt));
     }
 
+    @Test
+    void toStringPeriod() {
 
+        Period d1 = Period.ofDays(1);
+
+        assertEquals("P1D", d1.toString());
+
+        assertEquals("P32D", d1.plusDays(31).toString());
+
+        Period y2m43d500 = Period.ofDays(500).plusMonths(43).plusYears(2);
+
+        assertEquals("P2Y43M500D", y2m43d500.toString());
+
+    }
 }

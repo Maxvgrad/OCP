@@ -8,6 +8,11 @@ public class InstantTest {
 
     @Test
     void test() {
+        long epochSeconds = 0;
+
         Instant.now();
+        Instant.ofEpochSecond(epochSeconds);
+
+
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +46,15 @@ class LocalDateTest {
         LocalDate ld = LocalDate.of(2019, Month.JANUARY, 30);
         ld = ld.plus(1, ChronoUnit.MONTHS);
         assertEquals(28, ld.getDayOfMonth());
+    }
+
+
+    @Test
+    void formatter() {
+        LocalDate localDate = LocalDate.parse("2018-04-30", DateTimeFormatter.ISO_LOCAL_DATE);
+        localDate.plusDays(2);
+        //localDate.plusHours(5);
+        assertEquals(30, localDate.getDayOfMonth());
     }
 
 
