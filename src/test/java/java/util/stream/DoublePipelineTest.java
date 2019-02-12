@@ -1,4 +1,4 @@
-//package java.util.stream;
+package java.util.stream;
 
 import org.junit.jupiter.api.Test;
 
