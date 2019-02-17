@@ -1,7 +1,6 @@
-package org.ocp.jdk.internal.misc;
+package sun.misc;
 
 import org.junit.jupiter.api.Test;
-import sun.misc.VM;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -47,6 +48,17 @@ class ExecutorServiceTest {
         assertFalse(result.isDone());
         assertFalse(result.isCancelled());
         assertFalse(executorService.isTerminated());
+
+    }
+
+
+    @Test
+    void instanceOfFuture() {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+
+        Future<?> future = service.submit(() -> {});
+
+        assertTrue(future instanceof FutureTask);
 
     }
 
