@@ -6,11 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UnsafeTest {
 
@@ -96,6 +102,18 @@ class UnsafeTest {
 
     }
 
+    @Test // Static block is invoked anyway
+    void atomicBoolean() throws Exception {
+
+        AtomicBoolean atomicBoolean = (AtomicBoolean) unsafe.allocateInstance(AtomicBoolean.class);
+
+        Field offsetField = atomicBoolean.getClass().getDeclaredField("valueOffset");
+        offsetField.setAccessible(true);
+        long offset = offsetField.getLong(atomicBoolean);
+
+        assertEquals(12L, offset);
+    }
+
     @Test
     void throwException() {
         assertThrows(IOException.class, () -> unsafe.throwException(new IOException()));
@@ -121,20 +139,18 @@ class UnsafeTest {
 
     @Test //TODO
     void lockFreeIncrementAlgorithm() throws Exception {
-
         CASCounter counter = new CASCounter();
-
         int numOfThreads = 10;
-
         int numOfIncrementInvocations = 100;
 
-//        ExecutorService service = Executors.newFixedThreadPool(numOfThreads);
-//
-//        IntStream.range(0, numOfThreads).forEach(i -> service.submit(counter::increment));
-//
-//        counter.increment();
-        assertEquals(numOfThreads * numOfIncrementInvocations, counter.getCounter());
+        ExecutorService service = Executors.newFixedThreadPool(numOfThreads);
+        IntStream.range(0, numOfThreads).forEach(i -> service
+                .submit(() -> IntStream.range(0, numOfIncrementInvocations).forEach(iter -> counter.increment())));
 
+        service.shutdown();
+        service.awaitTermination(5, TimeUnit.SECONDS);
+        assertTrue(service.isTerminated());
+        assertEquals(numOfThreads * numOfIncrementInvocations, counter.getCounter());
     }
 
     private class ClassWithoutConstructorInvocation {
@@ -202,12 +218,12 @@ class UnsafeTest {
     //CompareAndSwap
     private class CASCounter {
 
-        private volatile long counter = 0;
-
         private long offset;
 
+        private volatile long counter = 0;
+
         public CASCounter() throws Exception {
-            this.offset = unsafe.objectFieldOffset(this.getClass().getDeclaredField("offset"));
+            this.offset = unsafe.objectFieldOffset(this.getClass().getDeclaredField("counter"));
         }
 
         public void increment() {
