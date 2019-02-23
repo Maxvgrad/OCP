@@ -1,18 +1,41 @@
 package org.ocp.collections;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class HashMapTest {
+class HashMapTest {
+
+    private HashMap<String, Integer> map;
+
+    private Map.Entry[] table;
+
+    private Map<String, Class<?>> innerClassesHashMap;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        map = new HashMap<>();
+        table = extractTable(map);
+        innerClassesHashMap = initHashMapInnerClasses(map);
+    }
+
 
     @Test
     @Tag("ch3")
@@ -58,5 +81,193 @@ public class HashMapTest {
         map.merge(1, 3, (a, b) -> a + b);
         map.merge(3, 3, (a, b) -> a + b);
         System.out.println(map);
+    }
+
+    @Test
+    void table() throws Exception {
+
+        assertNull(table);
+
+        map.put("key", 1);
+
+        Field tableField = map.getClass().getDeclaredField("table");
+        tableField.setAccessible(true);
+
+        table = (Map.Entry[]) tableField.get(map);
+
+        assertNotNull(table);
+        assertEquals(16, table.length);
+    }
+
+
+    @Test
+    void node() {
+        Node<String, Integer> node = new Node<>("key", 1);
+        Node<String, Integer> next = node.getNext();
+        assertNull(next);
+
+        node.setNext(new Node<>("key2", 1));
+
+        assertNull(next);
+    }
+
+    @Test
+    void nodeWithoutGetters() {
+        Node<String, Integer> node = new Node<>("key", 1);
+        Node<String, Integer> next = node.next;
+        assertNull(next);
+
+        node.next = new Node<>("key2", 1);
+
+        assertNull(next);
+    }
+
+    @Test
+    void treeifyTest() throws Exception {
+        Map<InvalidKeyWrapper, Integer> map = new HashMap<>();
+
+        Class<?> treeNodeClass = innerClassesHashMap.get("TreeNode");
+
+        boolean isNotFound = true;
+
+        for (int i = 0; i < 64; i++) {
+
+            if (map.size() == 9) {
+                map.put(InvalidKeyWrapper.getRundomKey("a"), i);
+            } else {
+                map.put(InvalidKeyWrapper.getRundomKey("a"), i);
+            }
+
+            table = extractTable((HashMap) map);
+
+            Map.Entry node = Arrays.stream(table).filter(Objects::nonNull).findFirst().orElseThrow(AssertionError::new);
+
+            if (isNotFound && node.getClass().equals(treeNodeClass)) {
+                System.out.println("Treeify map size: " + map.size());
+                isNotFound = false;
+            }
+
+        }
+    }
+
+    @Test
+    void sameLast4bitsInHash() {
+        map.put("DFHXR", 1);
+        map.put("YSXFJ", 1);
+        map.put("TUDDY", 1);
+        map.put("AXVUH", 1);
+        map.put("RUTWZ", 1);
+        map.put("DEDUC", 1);
+        map.put("WFCVW", 1);
+        map.put("ZETCU", 1);
+        map.put("GCVUR", 1);
+    }
+
+    @Test
+    void initialCapacity() throws Exception {
+
+        map = new HashMap<>(6);
+
+
+        map.put("key1", 1);
+
+        table = extractTable(map);
+        assertEquals(8, table.length);
+
+        map.put("key2", 2);
+        map.put("key3", 3);
+        map.put("key4", 4);
+        map.put("key5", 5);
+        map.put("key6", 6);
+        map.put("key7", 7);
+
+        table = extractTable(map);
+
+        assertEquals(16, table.length);
+    }
+
+
+
+
+    private static class Node<K, V> implements Map.Entry<K, V> {
+
+        private K key;
+
+        private V value;
+
+        private Node<K, V> next;
+
+        Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            return this.value = value;
+        }
+
+        void setNext(Node<K, V> next) {
+            this.next = next;
+        }
+
+        Node<K, V> getNext() {
+            return next;
+        }
+    }
+
+    private static class InvalidKeyWrapper {
+
+        private final String key;
+
+        InvalidKeyWrapper(String key) {
+            this.key = key;
+        }
+
+        private static InvalidKeyWrapper getRundomKey(String prefix) {
+            return new InvalidKeyWrapper(prefix + RandomStringUtils.random(10));
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            InvalidKeyWrapper that = (InvalidKeyWrapper) o;
+            return Objects.equals(key, that.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return key.charAt(0);
+        }
+    }
+
+    private Map<String, Class<?>> initHashMapInnerClasses(Map map) {
+        Class<?>[] classes = map.getClass().getDeclaredClasses();
+
+        return Arrays.stream(classes).collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
+    }
+
+
+    private Map.Entry[] extractTable(HashMap map) throws Exception {
+
+        Field tableField = map.getClass().getDeclaredField("table");
+        tableField.setAccessible(true);
+
+        return (Map.Entry[]) tableField.get(map);
     }
 }
