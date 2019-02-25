@@ -81,12 +81,26 @@ class StreamTest {
         assertTrue(unorderedResultTime < orderedResultTime);
     }
 
-
-
     // Ordered operations
     @Test
     void findFirstSkipLimitOnParallelStream() {
         assertEquals(7, IntStream.range(1, 10).parallel().skip(6).limit(4).findFirst().getAsInt());
+    }
+
+
+    // Reduce.(identity, accumulator, combiner)
+    @Test
+    void reduceSerialStream() {
+        String wolf = Stream.of('w', 'o', 'l', 'f').reduce("", (s, c) -> s + c, (s1, s2) -> s1 + s2);
+
+        assertEquals("wolf", wolf);
+    }
+
+    @Test
+    void reduceParallelStream() {
+        String wolf = Stream.of('w', 'o', 'l', 'f', '-', 'w', 'o', 'l', 'f').unordered().parallel().reduce("", (s, c) -> s + c, (s1, s2) -> s1 + s2);
+
+        assertNotEquals("wolf-wolf", wolf); //TODO: does not work
     }
 
     // Fun
