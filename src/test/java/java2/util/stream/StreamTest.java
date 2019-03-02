@@ -12,10 +12,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -79,6 +81,16 @@ class StreamTest {
         // arghhh!
     }
 
+    @Test //ch7q13
+    void combineStreams() {
+        Stream<String> cats = Stream.of("cat1", "cat2", "cat3", "cat4").parallel();
+        Stream<String> bears = Stream.of("bear1", "bear2", "bear3", "bear4").parallel();
+
+        Stream<Stream<String>> combinedStream = Stream.of(cats, bears);
+
+        assertFalse(Stream.of(cats, bears).isParallel());
+        assertFalse(Stream.of(cats, bears).map(Function.identity()).isParallel());
+    }
 
     // Unordered operations
     @Test
