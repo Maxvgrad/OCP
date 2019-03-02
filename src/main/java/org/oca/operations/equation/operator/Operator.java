@@ -1,4 +1,4 @@
-package org.oca.operations.operator;
+package org.oca.operations.equation.operator;
 
 import java.util.function.BinaryOperator;
 

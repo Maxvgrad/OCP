@@ -1,6 +1,6 @@
 package org.oca.operations.equation;
 
-import org.oca.operations.operator.OperatorFactory;
+import org.oca.operations.equation.operator.OperatorFactory;
 
 public class EquationFactory {
 

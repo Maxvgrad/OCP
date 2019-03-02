@@ -38,8 +38,31 @@ class StreamTest {
         assertTrue(parallelStream.isParallel());
     }
 
+    @Test // ch7q1
+    void parallelStream3() {
+        //new ParallelStream();
+        Stream parallelStream = Arrays.asList(5, 2, 3, 4, 5, 6).parallelStream();
+        //Stream.of(1, 2, 3, 4).parallelStream();
+        Stream.of(1, 2, 3, 4).parallel();
+    }
+
+    @Test //ch7q8
+    void parallelStream4() {
+        Integer i1 = Arrays.asList(1, 2, 3, 4, 5).stream().findAny().orElseThrow(AssertionError::new);
+        assertEquals(Integer.valueOf(1), i1);
+
+        synchronized (i1) {
+            int i2 = Arrays.asList(6, 7, 8, 9, 10).stream()
+                               //.parallelStream()
+                               //.sorted()
+                               .findAny()
+                               .orElseThrow(AssertionError::new);
+            assertEquals(6, i2);
+        }
+    }
+
     @Test
-    void parallelStreamTermilOperationHappensBeforeIntermediate() {
+    void parallelStreamTerminalOperationHappensBeforeIntermediate() {
         Stream.of("side", "effect", "note", "text").parallel().map(element -> {
             System.out.println(element); return element.toUpperCase(); }).forEach(System.out::println);
     }
@@ -108,6 +131,9 @@ class StreamTest {
     void limitMoreThanActualElementsInStream() {
         assertEquals(45L, IntStream.range(1, 10).parallel().limit(100).sum());
     }
+
+
+
 
 
 

@@ -3,10 +3,13 @@ package org.ocp.concurrent;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -62,6 +65,22 @@ class ExecutorServiceTest {
 
     }
 
+    @Test
+    void scheduledExecutorService() throws InterruptedException, ExecutionException {
+        ExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+
+        //scheduledExecutorService.scheduleWithFixedDelay(); ch7q3
+        ((ScheduledExecutorService) scheduledExecutorService).scheduleWithFixedDelay(() -> { //Runnable
+            System.out.println("Open zoo");
+            //return null;
+        }, 0, 1, TimeUnit.SECONDS);
+
+        Future<?> result = scheduledExecutorService.submit(() -> System.out.println("Wake stuff"));
+
+        System.out.println(result.get());
+    }
+
+
     private interface ThrowableRunnable{
 
         static Runnable wrap(ThrowableRunnable runnable) {
@@ -77,5 +96,22 @@ class ExecutorServiceTest {
         void run() throws Exception;
     }
 
+    //ch7q2
+    private class CustomCallable implements Callable<Integer> {
+
+        @Override //throws checked exception
+        public Integer call() throws Exception { //no args and return generic type
+            return 3;
+        }
+    }
+
+    //ch7q2
+    private class CustomRunnable implements Runnable {
+
+        @Override // does not throw checked exception
+        public void run() { //no args
+
+        }
+    }
 
 }

@@ -1,6 +1,6 @@
 package org.oca.operations.equation;
 
-import org.oca.operations.operator.Operator;
+import org.oca.operations.equation.operator.Operator;
 
 public class IntegerEquation extends BaseEquation<Integer> {
 
