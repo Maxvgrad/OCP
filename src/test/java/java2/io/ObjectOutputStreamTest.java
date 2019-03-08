@@ -24,7 +24,6 @@ class ObjectOutputStreamTest {
     private BufferedInputStream fileInputStream;
     private BufferedReader bufferedReader;
     private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
     private File tmpFile;
     private Person person;
     private byte[] buffer;
@@ -37,16 +36,14 @@ class ObjectOutputStreamTest {
         fileInputStream = new BufferedInputStream(new FileInputStream(tmpFile));
         bufferedReader = new BufferedReader(new FileReader(tmpFile));
         buffer = new byte[32];
-        //TODO
-        objectInputStream = null; //new ObjectInputStream(new BufferedInputStream(new FileInputStream(tmpFile)));
 
-//        tmpFile.deleteOnExit();
+        tmpFile.deleteOnExit();
     }
 
     @AfterEach
     void tearDown() throws Exception {
         objectOutputStream.close();
-        //tmpFile.delete();
+        tmpFile.delete();
     }
 
     @Test
@@ -80,12 +77,15 @@ class ObjectOutputStreamTest {
     void readSerializedObject() throws Exception {
         objectOutputStream.writeObject(person);
         objectOutputStream.flush();
+        objectOutputStream.close();
 
-        Object object = objectInputStream.readObject();
-        assertTrue(object instanceof Person);
-
-        Person deserializePerson = (Person) object;
-        assertEquals(deserializePerson.getName(), person.getName());
-        assertEquals(deserializePerson.getAge(), person.getAge());
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(
+                new BufferedInputStream(new FileInputStream(tmpFile)))) {
+            Object object = objectInputStream.readObject();
+            assertTrue(object instanceof Person);
+            Person deserializePerson = (Person) object;
+            assertEquals(deserializePerson.getName(), person.getName());
+            assertEquals(deserializePerson.getAge(), person.getAge());
+        }
     }
 }
