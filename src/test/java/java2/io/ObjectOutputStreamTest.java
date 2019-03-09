@@ -3,6 +3,7 @@ package java2.io;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.ocp.io.HomoSapience;
 import org.ocp.io.Person;
 
 import java.io.BufferedInputStream;
@@ -12,11 +13,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ObjectOutputStreamTest {
@@ -50,6 +53,26 @@ class ObjectOutputStreamTest {
     void writeSerializedObject() throws Exception {
         long fileSize = tmpFile.length();
         objectOutputStream.writeObject(person);
+        objectOutputStream.flush();
+        assertTrue(tmpFile.length() > fileSize);
+    }
+
+    @Test
+    void writeNotSerializableSuperClass() throws Exception {
+        HomoSapience homoSapience = person;
+
+        long fileSize = tmpFile.length();
+        objectOutputStream.writeObject(homoSapience);
+        objectOutputStream.flush();
+        assertTrue(tmpFile.length() > fileSize);
+    }
+
+    @Test
+    void writeNotSerializableClass() throws Exception {
+        HomoSapience homoSapience = new HomoSapience();
+
+        long fileSize = tmpFile.length();
+        assertThrows(NotSerializableException.class, () -> objectOutputStream.writeObject(homoSapience));
         objectOutputStream.flush();
         assertTrue(tmpFile.length() > fileSize);
     }

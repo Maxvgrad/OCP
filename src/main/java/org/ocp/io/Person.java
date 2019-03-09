@@ -2,7 +2,7 @@ package org.ocp.io;
 
 import java.io.Serializable;
 
-public class Person implements Serializable {
+public class Person extends HomoSapience implements Serializable {
 
     private String name;
     private Integer age;
