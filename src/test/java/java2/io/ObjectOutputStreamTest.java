@@ -3,7 +3,7 @@ package java2.io;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.ocp.concurrent.Person;
+import org.ocp.io.Person;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
