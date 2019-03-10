@@ -71,4 +71,10 @@ class FileTest {
         File file = new File(path);
         assertTrue(file.exists());
     }
+
+
+    @Test
+    void mkdirs() {
+        file.mkdirs();
+    }
 }

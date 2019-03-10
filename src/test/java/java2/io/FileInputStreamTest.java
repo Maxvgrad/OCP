@@ -52,4 +52,12 @@ class FileInputStreamTest {
         assertEquals(y, fileInputStream.read());
         assertEquals(z, fileInputStream.read());
     }
+
+
+    @Test
+    void ch8q1() throws Exception {
+        InputStream is = new BufferedInputStream(new FileInputStream(""));
+
+        //InputStream werapper = new FileInputStream(is); low level
+    }
 }

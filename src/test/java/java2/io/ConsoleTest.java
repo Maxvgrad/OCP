@@ -42,8 +42,8 @@ class ConsoleTest {
             console.printf("Argumer %s", "arg");
             console.readLine();
             console.readLine("Format", "arg");
-            console.readPassword();
-            console.readPassword("Format", "arg");
+            char[] pass =console.readPassword();
+            pass = console.readPassword("Format", "arg");
         }
     }
 }
