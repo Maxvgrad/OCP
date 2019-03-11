@@ -1,4 +1,4 @@
-package java2.nio;
+package java2.nio.file;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
