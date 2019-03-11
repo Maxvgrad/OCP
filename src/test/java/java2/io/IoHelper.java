@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Random;
 
-class IoHelper {
+public class IoHelper {
 
-    static File createTmpFile() {
+    public static File createTmpFile() {
         try {
             return File.createTempFile("file_" + new Random(42).nextInt(), "tmp");
         } catch (Exception ex) {
@@ -15,7 +15,7 @@ class IoHelper {
         }
     }
 
-    static void fill(String content, File file) {
+    public static void fill(String content, File file) {
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(content);
         } catch (Exception ex) {
