@@ -4,14 +4,19 @@ import java2.io.IoHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -138,5 +143,100 @@ class FilesTest {
         //then
         assertFalse(Files.exists(pathOne));
         assertTrue(Files.exists(pathTwo));
+    }
+
+    @Test
+    void delete_file() throws IOException {
+        //given
+        Path path = home.resolve(Paths.get("feature.txt"));
+        Files.createFile(path);
+
+        //when
+        Files.delete(path);
+
+        //then
+        assertFalse(Files.exists(path));
+    }
+
+    @Test
+    void delete_not_empty_directory() throws IOException {
+        //given
+        Path dir = home.resolve("folder");
+        Path file = dir.resolve("file");
+        try {
+            Files.createDirectory(dir);
+            Files.createFile(file);
+
+            //when
+            Files.delete(dir);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        } finally {
+            Files.delete(file);
+            Files.delete(dir);
+        }
+    }
+
+    @Test
+    void delete_if_exists() throws Exception {
+        Path path = home.resolve("file");
+        assertFalse(Files.deleteIfExists(path));
+    }
+
+    @Test
+    void buffered_reader() {
+        //given
+        Path file = Paths.get(".").normalize().resolve("don_juan.txt");
+
+        try (BufferedReader reader = Files.newBufferedReader(file, Charset.forName("UTF-8"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    @Test
+    void buffered_writer() {
+        //given
+        Path file = Paths.get(".").normalize().resolve("file");
+        String line = "Don Juan";
+
+        try (BufferedReader reader = Files.newBufferedReader(file, Charset.defaultCharset());
+             BufferedWriter writer = Files.newBufferedWriter(file, Charset.defaultCharset())) {
+
+            Files.createFile(file);
+
+            //when
+            writer.append(line);
+            writer.flush();
+
+            String lineFromFile = reader.readLine();
+
+            //then
+            assertEquals(line, lineFromFile);
+        } catch (IOException ex) {
+            System.out.println(ex);
+        } finally {
+            try {
+                Files.deleteIfExists(file);
+            } catch (IOException ex) {
+                System.out.println("File is not deleted.");
+            }
+        }
+    }
+
+    @Test
+    void read_all_lines() throws IOException {
+        //given
+        Path path = Paths.get(".").resolve("don_juan.txt");
+
+        //when
+        List<String> line = Files.readAllLines(path);
+
+        //then
+        assertFalse(line.isEmpty());
     }
 }
