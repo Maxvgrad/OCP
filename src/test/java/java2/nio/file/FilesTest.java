@@ -14,10 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.UserPrincipal;
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -238,5 +242,29 @@ class FilesTest {
 
         //then
         assertFalse(line.isEmpty());
+    }
+
+    @Test
+    void get_last_modified_time() throws IOException {
+        System.out.println(Files.getLastModifiedTime(home));
+    }
+
+    @Test
+    void set_last_modified_time() throws IOException {
+        Path path = Paths.get(".").normalize().resolve("don_juan.txt");
+        FileTime t1 = Files.getLastModifiedTime(path);
+
+        Files.setLastModifiedTime(path, FileTime.from(Instant.now()));
+        FileTime t2 = Files.getLastModifiedTime(path);
+
+        assertNotEquals(t1, t2);
+    }
+
+
+    @Test
+    void get_owner() throws IOException {
+        Path path = Paths.get(".").normalize().resolve("don_juan.txt");
+        UserPrincipal userPrincipal = Files.getOwner(path);
+        System.out.println(userPrincipal.getName());
     }
 }
