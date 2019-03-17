@@ -14,7 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.UserPrincipal;
 import java.time.Instant;
 import java.util.List;
@@ -266,5 +272,86 @@ class FilesTest {
         Path path = Paths.get(".").normalize().resolve("don_juan.txt");
         UserPrincipal userPrincipal = Files.getOwner(path);
         System.out.println(userPrincipal.getName());
+    }
+
+    @Test
+    void get_file_attribute_view_basic() {
+        BasicFileAttributeView view = Files.getFileAttributeView(home, BasicFileAttributeView.class);
+        assertEquals("basic", view.name());
+    }
+
+    @Test
+    void get_file_attribute_view_doc() {
+        DosFileAttributeView view = Files.getFileAttributeView(home, DosFileAttributeView.class);
+        assertEquals("doc", view.name());
+    }
+
+    @Test
+    void get_file_attribute_view_posix() {
+        PosixFileAttributeView view = Files.getFileAttributeView(home, PosixFileAttributeView.class);
+        assertEquals("posix", view.name());
+    }
+
+    @Test
+    void read_attributes_posix() {
+        assertThrows(UnsupportedOperationException.class, () -> Files.readAttributes(home, PosixFileAttributes.class));
+    }
+
+    @Test
+    void read_attributes_dos() throws IOException {
+        DosFileAttributes attributes = Files.readAttributes(home, DosFileAttributes.class);
+        System.out.println("isArchive: " + attributes.isArchive());
+        System.out.println("isHidden: " + attributes.isHidden());
+        System.out.println("isReadOnly: " + attributes.isReadOnly());
+        System.out.println("isSystem: " + attributes.isSystem());
+        System.out.println("creationTime: " + attributes.creationTime());
+        System.out.println("fileKey: " + attributes.fileKey());
+        System.out.println("isDirectory: " + attributes.isDirectory());
+        System.out.println("isOther: " + attributes.isOther());
+        System.out.println("isRegularFile: " + attributes.isRegularFile());
+        System.out.println("isSymbolicLink: " + attributes.isSymbolicLink());
+        System.out.println("lastAccessTime: " + attributes.lastAccessTime());
+        System.out.println("lastModifiedTime: " + attributes.lastModifiedTime());
+        System.out.println("size: " + attributes.size());
+    }
+
+    @Test
+    void read_attributes_basic() throws IOException {
+        BasicFileAttributes attributes = Files.readAttributes(home, BasicFileAttributes.class);
+
+        // Is Not part of BasicFileAttributes
+        //System.out.println("isArchive: " + attributes.isArchive());
+        //System.out.println("isHidden: " + attributes.isHidden());
+        //System.out.println("isReadOnly: " + attributes.isReadOnly());
+        //System.out.println("isSystem: " + attributes.isSystem());
+
+        System.out.println("creationTime: " + attributes.creationTime());
+        System.out.println("fileKey: " + attributes.fileKey());
+        System.out.println("isDirectory: " + attributes.isDirectory());
+        System.out.println("isOther: " + attributes.isOther());
+        System.out.println("isRegularFile: " + attributes.isRegularFile());
+        System.out.println("isSymbolicLink: " + attributes.isSymbolicLink());
+        System.out.println("lastAccessTime: " + attributes.lastAccessTime());
+        System.out.println("lastModifiedTime: " + attributes.lastModifiedTime());
+        System.out.println("size: " + attributes.size());
+    }
+
+    @Test
+    void walk_java_classes() throws Exception {
+        Path path = Paths.get(".").toRealPath();
+
+        long count = Files.walk(path).filter(p -> p.toString().endsWith(".java")).count();
+        assertTrue(count > 100);
+    }
+
+    @Test
+    void find_heavy_classes() throws Exception {
+        Path path = Paths.get(".").toRealPath();
+        Files.find(path, 20, (p, v) -> v.size() > 10000).forEach(System.out::println);
+    }
+
+    @Test
+    void list() throws Exception {
+        Files.list(home).filter(p -> p.getName(2).toString().startsWith(".")).forEach(System.out::println);
     }
 }
