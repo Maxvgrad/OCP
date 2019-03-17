@@ -128,4 +128,10 @@ class PathTest {
         Path path = Paths.get("F:", "projects", "max");
         assertEquals("F:\\projects\\max", path.toString());
     }
+
+    @Test
+    void ch9_q1() {
+        Path path = Paths.get("F:", "projects", "max");
+        //path.normalize().relativize("/login"); does not compile
+    }
 }
