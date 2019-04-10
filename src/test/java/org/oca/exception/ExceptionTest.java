@@ -33,6 +33,14 @@ class ExceptionTest {
 
     }
 
+    @Test
+    void waitMethodOfObject() {
+        try {
+            new Object().wait();
+        } catch (InterruptedException ex) {
+
+        }
+    }
 
     private class ParentException extends Exception {}
 

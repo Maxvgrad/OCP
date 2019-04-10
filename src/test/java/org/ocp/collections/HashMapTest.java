@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,6 +60,7 @@ class HashMapTest {
         assertEquals(0, map.size()); //1
     }
 
+
     @Test
     @DisplayName("")
     @Tag("ch3")
@@ -79,8 +81,54 @@ class HashMapTest {
         System.out.println(map);
 
         map.merge(1, 3, (a, b) -> a + b);
+        assertEquals(Integer.valueOf(13), map.get(1));
         map.merge(3, 3, (a, b) -> a + b);
-        System.out.println(map);
+        assertEquals(Integer.valueOf(3), map.get(3));
+        map.merge(2, 2, (a, b) -> null);
+        assertNull(map.get(2));
+    }
+
+    @Test
+    void compute() {
+        //given
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 10);
+        map.put(2, 20);
+        map.put(3, null);
+        //when - then
+        assertEquals(Integer.valueOf(45), map.compute(1, (k, v) -> 45));
+        assertEquals(Integer.valueOf(45), map.get(1));
+        assertNull(map.compute(2, (k, v) -> null));
+        assertFalse(map.containsKey(2));
+        assertEquals(Integer.valueOf(55), map.compute(5, (k, v) -> 55));
+    }
+
+    @Test
+    void computeIfAbsent() {
+        //given
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 10);
+        map.put(2, 20);
+        map.put(3, null);
+        //when - then
+        assertEquals(Integer.valueOf(45), map.computeIfAbsent(15, (k) -> 45));
+        assertEquals(Integer.valueOf(45), map.get(15));
+        assertEquals(Integer.valueOf(10), map.computeIfAbsent(1, (k) -> 45));
+        assertNull(map.computeIfAbsent(55, (k) -> null));
+    }
+
+    @Test
+    void computeIfPresent() {
+        //given
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 10);
+        map.put(2, 20);
+        map.put(3, null);
+        //when - then
+        assertEquals(Integer.valueOf(45), map.computeIfPresent(1, (k, v) -> 45));
+        assertEquals(Integer.valueOf(45), map.get(1));
+        assertNull(map.computeIfPresent(1, (k, v) -> null));
+        assertNull(map.computeIfPresent(55, (k, v) -> null));
     }
 
     @Test

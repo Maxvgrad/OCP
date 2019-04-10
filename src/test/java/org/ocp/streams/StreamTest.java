@@ -8,6 +8,7 @@ import org.ocp.dto.PersonDto;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.ocp.testutils.TestUtils.buildPerson;
 
@@ -213,5 +215,29 @@ class StreamTest {
         Stream<String> catsStram = cats.stream();
         cats.add("Moe");
         assertEquals(3, catsStram.count());
+    }
+
+    @Test
+    void sort() {
+        List<Item> l = Arrays.asList(new Item(1, "Screw"),
+                                     new Item(2, "Nail"),
+                                     new Item(3, "Bolt"));
+
+        assertThrows(ClassCastException.class, () -> l.stream().sorted().forEach(System.out::println));
+
+        l.stream().map(i -> i.name).sorted().forEach(System.out::println);
+        l.stream().sorted((i1, i2) -> i1.name.compareTo(i2.name)).forEach(System.out::println);
+        l.stream().sorted(Comparator.comparing(i1 -> i1.name)).forEach(System.out::println);
+
+    }
+
+    private class Item {
+        String name;
+        Integer num;
+
+        public Item(Integer num, String name) {
+            this.name = name;
+            this.num = num;
+        }
     }
 }

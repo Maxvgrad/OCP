@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.ocp.dto.PersonDto;
 import org.ocp.testutils.TestUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.DoubleToIntFunction;
 import java.util.function.Function;
@@ -99,7 +101,50 @@ class FunctionTest {
         assertEquals(1D, function.applyAsInt(personDto));
     }
 
+    @Test
+    void filter() {
+
+        List<Movie> movies = Arrays.asList(
+                new Movie("Titanic", Genre.DRAMA, 'U'),
+                new Movie("Psycho", Genre.THRILLER, 'U'),
+                new Movie("Oldboy", Genre.THRILLER, 'R'),
+                new Movie("Shining", Genre.HORROR, 'U')
+        );
+        movies.stream()
+              .filter(mov->mov.getRating()=='R')
+              .peek(mov->System.out.println(mov.getName()))
+              .map(mov->mov.getName()).forEach((d) -> {});
+    }
+
     private void accept(PersonDto person, Double id, DoubleToIntFunction converter, ObjIntConsumer<PersonDto> idSetter) {
         idSetter.accept(person, converter.applyAsInt(id));
     }
+
+    private enum Genre  {DRAMA, THRILLER, HORROR, ACTION };
+
+    private class Movie{
+
+        private Genre genre;
+        private String name;
+        private char rating = 'R';
+
+        Movie(String name, Genre genre, char rating) {
+            this.name = name;
+            this.genre = genre;
+            this.rating = rating;
+        }
+
+        public Genre getGenre() {
+            return genre;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public char getRating() {
+            return rating;
+        }
+    }
+
 }
