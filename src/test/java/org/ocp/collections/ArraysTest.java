@@ -2,11 +2,8 @@ package org.ocp.collections;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,4 +60,22 @@ class ArraysTest {
         assertEquals("max", array[0]);
     }
 
+    @Test
+    void binarySearch() {
+        String[] sa = { "a", "aa", "aaa", "aaaa" };
+        String search = "a";
+        assertEquals(0, Arrays.binarySearch(sa, search));
+
+        search = "0";
+        assertEquals(-1, Arrays.binarySearch(sa, search));
+
+        search = "b";
+        assertEquals(-5, Arrays.binarySearch(sa, search));
+
+        search = "a1";
+        assertEquals(-2, Arrays.binarySearch(sa, search));
+
+        search = "aa1";
+        assertEquals(-3, Arrays.binarySearch(sa, search));
+    }
 }
