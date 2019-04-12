@@ -1,0 +1,40 @@
+package org.ocp.collections;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class DequeTest {
+
+    private Deque<String> deque = new ArrayDeque<>();
+
+    @Test
+    void pop() {
+        deque.add("one");
+        deque.push("two");
+        assertEquals("two", deque.pop());
+        assertEquals("one", deque.pop());
+    }
+
+    @Test
+    void peek() {
+        deque.add("one");
+        deque.push("two");
+        assertEquals("two", deque.peek());
+        assertEquals("two", deque.peekFirst());
+        assertEquals("one", deque.peekLast());
+    }
+
+    @Test
+    void poll() {
+        deque.add("one");
+        deque.push("two");
+        deque.addLast("three");
+        assertEquals("two", deque.poll());
+        assertEquals("three", deque.pollLast());
+        assertEquals("one", deque.pop());
+    }
+}
