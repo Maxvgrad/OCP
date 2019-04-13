@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class CyclicBarrierTest {
 
     @Test
@@ -25,6 +27,21 @@ class CyclicBarrierTest {
         TimeUnit.SECONDS.sleep(5);
     }
 
+    @Test
+    void test() throws Exception {
+
+        Merger m = new Merger();
+
+        CyclicBarrier cb = new CyclicBarrier(2, m);
+        ItemProcessor ip = new ItemProcessor(cb);
+        ip.start();
+
+        TimeUnit.SECONDS.sleep(2);
+        assertEquals(1, cb.getNumberWaiting());
+        assertEquals(2, cb.getParties());
+
+        cb.await();
+    }
 
     private class Track {
 
@@ -45,5 +62,29 @@ class CyclicBarrierTest {
 
         }
 
+    }
+
+    private class ItemProcessor extends Thread {
+        CyclicBarrier cb;
+
+        public ItemProcessor(CyclicBarrier cb) {
+            this.cb = cb;
+        }
+
+        public void run() {
+            System.out.println("processed");
+            try {
+                cb.await();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+
+    private class Merger implements Runnable {
+        public void run() {
+            System.out.println("Value Merged");
+        }
     }
 }
