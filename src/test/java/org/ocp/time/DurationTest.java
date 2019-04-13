@@ -3,6 +3,8 @@ package org.ocp.time;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,5 +43,14 @@ class DurationTest {
 
         assertFalse(m1.toString() == s60.toString());
 
+    }
+
+    @Test
+    void between() {
+        Duration d = Duration.between(LocalDateTime.of(2015, Month.SEPTEMBER, 3, 10, 10), LocalDateTime.of(2015, Month.SEPTEMBER, 2, 10, 10));
+        assertEquals("PT-24H", d.toString());
+
+        d = Duration.between(LocalDateTime.of(2015, Month.SEPTEMBER, 3, 11, 10), LocalDateTime.of(2015, Month.SEPTEMBER, 2, 10, 10));
+        assertEquals("PT-25H", d.toString());
     }
 }

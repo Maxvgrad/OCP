@@ -2,7 +2,9 @@ package org.ocp.time;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -44,5 +46,14 @@ class PeriodTest {
 
         assertEquals("P2Y43M500D", y2m43d500.toString());
 
+    }
+
+    @Test
+    void between() {
+        Period p = Period.between(LocalDate.of(2015, Month.AUGUST, 20), LocalDate.of(2015, Month.SEPTEMBER, 1));
+        assertEquals("P12D", p.toString());
+
+        p = Period.between(LocalDate.of(2015, Month.SEPTEMBER, 20), LocalDate.of(2015, Month.SEPTEMBER, 1));
+        assertEquals("P-19D", p.toString());
     }
 }

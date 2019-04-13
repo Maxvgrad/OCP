@@ -37,4 +37,34 @@ class DequeTest {
         assertEquals("three", deque.pollLast());
         assertEquals("one", deque.pop());
     }
+
+    @Test
+    void add() {
+        deque.add("one");
+        deque.push("two");
+        deque.add("three"); // addLast
+        assertEquals("two", deque.poll());
+        assertEquals("three", deque.pollLast());
+        assertEquals("one", deque.pop());
+    }
+
+    @Test
+    void offer() {
+        deque.add("one");
+        deque.push("two");
+        deque.offer("three"); // addLast
+        assertEquals("two", deque.poll());
+        assertEquals("three", deque.pollLast());
+        assertEquals("one", deque.pop());
+    }
+    @Test
+    void offerLast() {
+        deque.offerFirst("one"); // addFirst
+        deque.push("two");
+        deque.offerLast("three"); // addLast
+        assertEquals("two", deque.poll());
+        assertEquals("three", deque.pollLast());
+        assertEquals("one", deque.pop());
+    }
+
 }

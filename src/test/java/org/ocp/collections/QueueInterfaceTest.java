@@ -54,6 +54,14 @@ class QueueInterfaceTest {
     }
 
     @Test
+    void elementFirst() {
+        queue.offer("first");
+        queue.offer("second");
+        assertEquals("first", queue.element());
+        assertFalse(queue.isEmpty());
+    }
+
+    @Test
     void elementThrows() {
         assertThrows(NoSuchElementException.class, queue::element);
     }
