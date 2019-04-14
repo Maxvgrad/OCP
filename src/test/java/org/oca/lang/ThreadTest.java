@@ -52,4 +52,21 @@ class ThreadTest {
         thread.setName(name);
         return thread;
     }
+
+    @Test
+    void myThreadTest() {
+        new MyThread().start();
+    }
+
+    class MyThread extends Thread {
+        int i = 0;
+
+        public void run() {
+            while (true) {
+                if (i % 2 == 0) {
+                    System.out.println("Hello World");
+                }
+            }
+        }
+    }
 }

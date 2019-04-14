@@ -4,8 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
@@ -55,5 +58,15 @@ class PeriodTest {
 
         p = Period.between(LocalDate.of(2015, Month.SEPTEMBER, 20), LocalDate.of(2015, Month.SEPTEMBER, 1));
         assertEquals("P-19D", p.toString());
+    }
+
+    @Test
+    void dst() {
+        LocalDateTime ld = LocalDateTime.of(2015, Month.OCTOBER, 31, 10, 0);
+        ZoneId zoneId = ZoneId.of("US/Eastern");
+        ZonedDateTime date = ZonedDateTime.of(ld, zoneId);
+        date = date.plus(Period.ofDays(1));
+
+        assertEquals(ZonedDateTime.of(LocalDate.of(2015, Month.NOVEMBER, 1), LocalTime.of(10, 0), zoneId), date);
     }
 }

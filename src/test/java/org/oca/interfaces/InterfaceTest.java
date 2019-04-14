@@ -74,6 +74,31 @@ class InterfaceTest {
         }
     }
 
-    //class WithTwoSameMethodsButWithDiffReturnType implements House, Island { //incompatible return type
+    //class ClassWithTwoDefaultMethodsWithoutOverriding implements Area, House {
+
     //}
+
+    //class WithTwoSameMethodsButWithDiffReturnType implements House, Island { //incompatible return type
+
+    //}
+
+
+    interface Container {
+        int VOLUME = 4;
+    }
+
+    interface Box {
+        int VOLUME = 2;
+    }
+
+    class Volumable implements Container, Box {
+        //just for test (:
+        private int getVolumeWithoutCust() {
+            int v = Container.VOLUME;
+            v = Box.VOLUME;
+            Volumable volumable = new Volumable();
+            return ((Box)volumable).VOLUME;
+        }
+    }
+
 }

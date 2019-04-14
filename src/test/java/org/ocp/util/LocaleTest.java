@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class LocaleTest {
 
@@ -29,5 +30,11 @@ class LocaleTest {
     void localConstructorConventionOneArg() {
         Locale locale = new Locale("fr");
         assertEquals("fr", locale.toString());
+    }
+
+    @Test
+    void defaultLocale() {
+        assertNotNull(Locale.getDefault());
+        Locale locale = Locale.UK;
     }
 }

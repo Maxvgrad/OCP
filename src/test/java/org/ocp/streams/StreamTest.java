@@ -13,6 +13,7 @@ import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.LongSummaryStatistics;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Random;
@@ -40,7 +41,7 @@ class StreamTest {
     @Test
     void reduceOneArgTest() {
         Optional multiplicationResult = Stream.of(3, 5, 7, 6).reduce(Math::multiplyExact);
-        assertEquals(3*5*7*6, multiplicationResult.get());
+        assertEquals(3 * 5 * 7 * 6, multiplicationResult.get());
     }
 
     @Test
@@ -52,7 +53,7 @@ class StreamTest {
     @Test
     void reduceTwoArgTest() {
         Integer multiplicationResult = Stream.of(3, 5, 7, 6).reduce(20, Math::multiplyExact);
-        assertEquals(Integer.valueOf(3*5*7*6*20), multiplicationResult);
+        assertEquals(Integer.valueOf(3 * 5 * 7 * 6 * 20), multiplicationResult);
     }
 
     @Test
@@ -128,14 +129,14 @@ class StreamTest {
     @Test
     @DisplayName("Debug")
     void debug2Test() {
-        Stream.iterate(1, (n) -> n+1)
+        Stream.iterate(1, (n) -> n + 1)
               .limit(5)
               .peek(System.out::print)
-              .filter(n -> n%2==1)
+              .filter(n -> n % 2 == 1)
               .forEach(System.out::print);
         System.out.println();
-        Stream.iterate(1, (n) -> n+1)
-              .filter(n -> n%2==1)
+        Stream.iterate(1, (n) -> n + 1)
+              .filter(n -> n % 2 == 1)
               .peek(System.out::print)
               .limit(5)
               .forEach(System.out::print);
@@ -229,6 +230,24 @@ class StreamTest {
         l.stream().sorted((i1, i2) -> i1.name.compareTo(i2.name)).forEach(System.out::println);
         l.stream().sorted(Comparator.comparing(i1 -> i1.name)).forEach(System.out::println);
 
+    }
+
+    @Test
+    void reduce() {
+
+        List<Integer> ls = Arrays.asList(3, 4, 6, 9, 2, 5, 7);
+        assertEquals(Integer.valueOf(9), ls.stream().reduce(Integer.MIN_VALUE, (a, b) -> a > b ? a : b));
+        //assertEquals(Integer.valueOf(9), ls.stream().max(Integer::max).get());
+        assertEquals(Integer.valueOf(9), ls.stream().max(Integer::compare).get());
+        //assertEquals(Integer.valueOf(9), ls.stream().max((a, b)->a>b?a:b).get());
+
+    }
+
+    @Test
+    void counting() {
+        List<String> names = Arrays.asList("greg", "dave", "don", "ed", "fred");
+        Map<Integer, Long> data = names.stream().collect(Collectors.groupingBy(String::length, Collectors.counting()));
+        System.out.println(data.values());
     }
 
     private class Item {

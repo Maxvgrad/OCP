@@ -134,4 +134,19 @@ class PathTest {
         Path path = Paths.get("F:", "projects", "max");
         //path.normalize().relativize("/login"); does not compile
     }
+
+    @Test
+    void t1_q35() {
+        Path p1 = Paths.get("x\\y");
+        Path p2 = Paths.get("z");
+        Path p3 = p1.relativize(p2);
+        assertEquals("..\\..\\z", p3.toString());
+    }
+
+    @Test
+    void relativize_one_path_with_root() {
+        Path p1 = Paths.get("\\x\\y");
+        Path p2 = Paths.get("z");
+        assertThrows(IllegalArgumentException.class, () -> p1.relativize(p2));
+    }
 }
