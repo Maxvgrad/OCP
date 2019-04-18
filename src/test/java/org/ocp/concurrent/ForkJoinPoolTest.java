@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,4 +47,37 @@ class ForkJoinPoolTest {
 
         assertEquals(0, min.compareTo(Integer.MIN_VALUE));
     }
+
+    @Test
+    void commonLogic() {
+
+        new RecursiveAction() {
+            private Object[] dataSet;
+
+            @Override
+            protected void compute() {
+                if (isSmallEnough(dataSet)) {
+                    processDirectly(dataSet);  //LINE 10
+                } else {
+                    List<Object> list = splitDataSet(dataSet); //LINE 13
+                    List<RecursiveAction> subactions = Collections.emptyList(); //build MyRecursiveAction objects for each DataSe
+                    invokeAll(subactions); //LINE 15   }  }
+                }
+            }
+
+            private boolean isSmallEnough(Object[] dataSet) {
+                return true;
+            }
+
+            private void processDirectly(Object[] dataSet) {
+
+            }
+
+            private List<Object> splitDataSet(Object[] dataSet) {
+                return Collections.emptyList();
+            }
+        };
+    }
+
+
 }

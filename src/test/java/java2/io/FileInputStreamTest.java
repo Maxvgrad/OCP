@@ -7,6 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,6 +53,22 @@ class FileInputStreamTest {
         assertEquals(y, fileInputStream.read());
         assertEquals(z, fileInputStream.read());
     }
+
+    @Test
+    void skipAndRead() throws Exception {
+
+        try (FileInputStream fis = new FileInputStream(ClassLoader.getSystemResource("count.txt").getFile());
+             InputStreamReader isr = new InputStreamReader(fis)) {
+            while (isr.ready()) {
+                isr.skip(1);
+                int i = isr.read();
+                char c = (char) i;
+                System.out.print(c);
+            }
+
+        }
+    }
+
 
 
     @Test

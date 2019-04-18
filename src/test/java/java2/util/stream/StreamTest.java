@@ -7,6 +7,7 @@ import org.ocp.concurrent.PerformanceCallable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -136,6 +137,13 @@ class StreamTest {
         String wolf = Stream.of('w', 'o', 'l', 'f', '-', 'w', 'o', 'l', 'f').unordered().parallel().reduce("", (s, c) -> s + c, (s1, s2) -> s1 + s2);
 
         assertNotEquals("wolf-wolf", wolf); //TODO: does not work
+    }
+
+    @Test
+    void range() {
+        IntStream is1 = IntStream.range(0, 5);
+        OptionalDouble x = is1.average(); //2
+        assertEquals(OptionalDouble.of(2), x); //3
     }
 
     // Fun
