@@ -3,9 +3,11 @@ package org.ocp.util;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ResourceBundleTest {
 
@@ -40,6 +42,35 @@ class ResourceBundleTest {
 
         assertEquals("Scotland", resourceBundle.getString("province"));
         assertEquals("Chelsea", resourceBundle.getString("club"));
+    }
+
+    @Test
+    void getMsg() {
+        Locale.setDefault(new Locale("fr", "CA"));
+        Locale l = new Locale("jp", "JP");
+        ResourceBundle rb = ResourceBundle.getBundle("appmessages", l);
+        String msg = rb.getString("key_1");
+        assertEquals("jp_JP", msg);
+
+        msg = rb.getString("key_2");
+        assertEquals("jp", msg);
+
+        msg = rb.getString("key_3");
+        assertEquals("none", msg);
+
+        assertThrows(MissingResourceException.class, () -> rb.getString("key_4"));
+    }
+
+    @Test
+    void getMsgDefault() {
+        Locale.setDefault(new Locale("fr", "CA"));
+
+        ResourceBundle rb = ResourceBundle.getBundle("appmessages");
+        String msg = rb.getString("key_1");
+        assertEquals("fr_CA", msg);
+
+        msg = rb.getString("key_4");
+        assertEquals("fr_CA", msg);
     }
 
     private void printContent(ResourceBundle bundle) {

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -267,6 +268,23 @@ class StreamTest {
                               return a.concat(b);
                           });
         System.out.println(join);
+    }
+
+    @Test
+    void parallelStreamTest2() {
+        AtomicInteger ai = new AtomicInteger();
+        Stream<String> stream = Stream.of("old", "king", "cole", "was", "a", "merry", "old", "soul").parallel();
+        stream.filter( e->{ ai.incrementAndGet();
+            return e.contains("o");
+        }).allMatch(x->x.indexOf("o")<3);
+
+        System.out.println(ai);
+    }
+
+    @Test
+    void findAny() {
+        Object v2 = IntStream.rangeClosed(10, 15).boxed().filter(x -> x > 12).sequential().findAny();
+        assertEquals(Optional.of(13), v2);
     }
 
     private class Item {

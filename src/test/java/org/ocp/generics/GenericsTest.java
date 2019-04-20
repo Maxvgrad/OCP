@@ -115,8 +115,17 @@ public class GenericsTest {
     @Tag("ch3")
     @DisplayName("WildCard capture")
     void wildCardCaptureTest() {
+        List<String> input = new ArrayList<>();
+        List<? super String> result1 = doIt(input);
+        List<?> result2 = doIt(input);
+        List result3 = doIt(input);
 
     }
+
+    private <E extends CharSequence> List<? super E> doIt(List<E> nums) {
+        return null;
+    }
+
 
     void wildCardError(List<?> list) {
         //list.set(0, list.get(0));

@@ -101,4 +101,23 @@ class InterfaceTest {
         }
     }
 
+    interface Account {
+        default String getId() {
+            return "00";
+        }
+    }
+
+    interface PremiumAccount extends Account {
+        String getId();
+    }
+
+
+    class AccountImpl implements PremiumAccount {
+
+        @Override
+        public String getId() {
+            return null;
+        }
+    }
+
 }
