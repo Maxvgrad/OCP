@@ -67,4 +67,13 @@ class DequeTest {
         assertEquals("one", deque.pop());
     }
 
+    @Test
+    void remove() {
+        deque.push("1");
+        deque.push("2");
+
+        assertEquals("2", deque.remove());
+
+
+    }
 }

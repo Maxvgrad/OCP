@@ -354,4 +354,11 @@ class FilesTest {
     void list() throws Exception {
         Files.list(home).filter(p -> p.getName(2).toString().startsWith(".")).forEach(System.out::println);
     }
+
+    @Test
+    void createBufferedReader() throws IOException {
+        assertThrows(NoSuchFileException.class, () -> {
+            Files.newBufferedReader(Paths.get("UnExistedPath")).read();
+        });
+    }
 }

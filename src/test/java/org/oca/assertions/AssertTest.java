@@ -1,5 +1,7 @@
 package org.oca.assertions;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * Assertions can be enabled or disabled for specific packages or classes.
  * To specify a class, use the class name. To specify a package,
@@ -21,5 +23,11 @@ package org.oca.assertions;
  * It then disables assertions for classes in package com.enthuware and its subpackages.
  * */
 
-public class AssertTest {
+class AssertTest {
+
+
+    @Test
+    void throwErrorDoesNotNeedCheck() {
+        throw new AssertionError();
+    }
 }
