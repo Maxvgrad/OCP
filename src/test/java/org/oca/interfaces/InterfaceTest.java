@@ -2,6 +2,9 @@ package org.oca.interfaces;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InterfaceTest {
@@ -117,6 +120,22 @@ class InterfaceTest {
         @Override
         public String getId() {
             return null;
+        }
+    }
+
+    interface Db {
+        void create() throws SQLException;
+    }
+
+    interface FileSystem {
+        void create() throws IOException;
+    }
+
+    class FileSystemDb implements Db, FileSystem {
+
+        @Override
+        public void create() { // without throws
+
         }
     }
 

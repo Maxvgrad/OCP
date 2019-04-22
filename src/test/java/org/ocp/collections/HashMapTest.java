@@ -37,6 +37,10 @@ class HashMapTest {
         innerClassesHashMap = initHashMapInnerClasses(map);
     }
 
+    static synchronized void synchronizedMethod() {
+
+    }
+
 
     @Test
     @Tag("ch3")
@@ -232,6 +236,53 @@ class HashMapTest {
         table = extractTable(map);
 
         assertEquals(16, table.length);
+    }
+
+
+    @Test
+    void nonOverrideHashCode() {
+
+        BookStore bs = new BookStore();
+
+        Book b = new Book();
+        b.setIsbn("111");
+        bs.addBook(b, 10);
+
+        System.out.println(bs.getNumberOfCopies(b));
+        Book b2 = new Book();
+        b2.setIsbn("111");
+
+        assertThrows(NullPointerException.class, () -> bs.getNumberOfCopies(b2));
+
+        assertNull(bs.getNumberOfCopiesWithoutUnboxing(b2));
+    }
+
+    class Book {
+        private String title, isbn;
+
+        public boolean equals(Object o) {
+            return (o instanceof Book && ((Book) o).isbn.equals(this.isbn));
+        }
+
+        public void setIsbn(String idbn) {
+            this.isbn = isbn;
+        }
+    }
+
+    class BookStore {
+        Map<Book, Integer> map = new HashMap<>();
+
+        int getNumberOfCopies(Book b) { //npe
+            return map.get(b);
+        }
+
+        Integer getNumberOfCopiesWithoutUnboxing(Book b) { //npe
+            return map.get(b);
+        }
+
+        void addBook(Book b, int numberofcopies) {
+            map.put(b, numberofcopies);
+        }
     }
 
 

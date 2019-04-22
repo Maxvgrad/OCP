@@ -122,6 +122,55 @@ public class GenericsTest {
 
     }
 
+    @Test
+    void superType() {
+
+        List<? super Number> numbers = new ArrayList<>();
+
+        //numbers.add(new Object());
+        numbers.add(3);
+        numbers.add(3L);
+        numbers.add(new Number() {
+            @Override
+            public int intValue() {
+                return 0;
+            }
+
+            @Override
+            public long longValue() {
+                return 0;
+            }
+
+            @Override
+            public float floatValue() {
+                return 0;
+            }
+
+            @Override
+            public double doubleValue() {
+                return 0;
+            }
+        });
+
+        Object intNumber = numbers.get(0);
+        //Serializable serializableNumber = numbers.get(0);
+
+
+        List<? super ArrayList> lists = new ArrayList<>();
+
+        lists.add(new ArrayList());
+
+        //ArrayList arrayList = lists.get(0);
+        //AbstractList abstractList = lists.get(0);
+        Object abstractList = lists.get(0);
+
+        //listsConsumer(lists);
+    }
+
+    private void listsConsumer(List<ArrayList> lists) {
+
+    }
+
     private <E extends CharSequence> List<? super E> doIt(List<E> nums) {
         return null;
     }
