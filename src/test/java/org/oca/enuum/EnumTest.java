@@ -1,6 +1,8 @@
 package org.oca.enuum;
 
 
+import org.junit.jupiter.api.Test;
+
 /**
  * You need to know the following facts about enums:
  * <p>
@@ -30,4 +32,41 @@ class EnumTest {
 
     private Enum anEnum;
 
+
+    @Test
+    void localEnumsAreNotSupported() {
+        // enum Dog {}
+    }
+
+    // break the order of enum constants.
+    private enum Dog {
+        //private String name;
+        //BEED
+    }
+
+    private enum Cat {
+
+        BRITISH("british") {
+            @Override
+            public String getPrefix() {
+                return "overwritten prefix";
+            }
+        };
+
+        private String name;
+        private static String prefix = "cat "; // unable to access non final static field from constructor
+
+        Cat(String name) {
+            //this.name = prefix + name;
+            this.name = name;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        private void setName(String name) {
+            this.name = name;
+        }
+    }
 }

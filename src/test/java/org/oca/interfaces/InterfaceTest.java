@@ -7,6 +7,14 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * This is a valid reason for declaring an interface but not an abstract class.
+ * Generally, the purpose of an interface is to identify and declare just the behavior.
+ * Actual implementation can come later. While abstract class is used when a common implementation is also identified.
+ * In that respect, an abstract class actually provides less abstraction than an interface.
+ */
+
+
 class InterfaceTest {
 
 
@@ -138,5 +146,30 @@ class InterfaceTest {
 
         }
     }
+
+    // redeclare static method
+
+    interface Measurement {
+        static void measure() {
+
+        }
+    }
+
+    interface Size extends Measurement {
+        default void measure() {
+
+        }
+    }
+
+    interface Volume extends Measurement {
+        void measure();
+    }
+
+    // redeclare default method into static
+
+    interface BackIntoStatic extends Volume {
+        //static void measure() {} // can not override
+    }
+
 
 }

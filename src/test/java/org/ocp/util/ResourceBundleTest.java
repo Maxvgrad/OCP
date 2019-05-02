@@ -73,6 +73,12 @@ class ResourceBundleTest {
         assertEquals("fr_CA", msg);
     }
 
+    @Test
+    void unExistingBundle() {
+        Locale.setDefault(Locale.US);
+        assertThrows(MissingResourceException.class, () -> ResourceBundle.getBundle("msg"));
+    }
+
     private void printContent(ResourceBundle bundle) {
         bundle.keySet().stream()
                       .forEach(key -> System.out.println(key + " = " + bundle.getString(key)));

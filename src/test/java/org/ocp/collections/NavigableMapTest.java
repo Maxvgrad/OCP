@@ -23,13 +23,21 @@ class NavigableMapTest {
     private NavigableMap<Integer, PersonDto> navigableMap;
 
     @BeforeEach
-    @SuppressWarnings("unchecked")
-    void init() throws Exception {
-        navigableMap = populateWithPerson(TreeMap.class);
+    void init() {
+        navigableMap = new TreeMap<>();
+
+        for (int i = 0; i < INIT_MAP_SIZE; i++) {
+            PersonDto personDto = TestUtils.buildPerson();
+            navigableMap.put(personDto.getId(), personDto);
+        }
+
     }
 
     @Test
     void checkClassesNavigableMapExtending() {
+
+        // NavigableMap -> SortedMap -> Map
+
         SortedMap<Integer, PersonDto> sortedMap = navigableMap;
         Map<Integer, PersonDto> map = sortedMap;
         assertEquals(INIT_MAP_SIZE, map.size());
@@ -41,53 +49,131 @@ class NavigableMapTest {
         navigableMap = Collections.checkedNavigableMap(navigableMap, Integer.class, PersonDto.class);
     }
 
+    //ceilingEntry
+
     @Test
-    void checkCeilingEntry() {
-        navigableMap.remove(9);
-        Entry<Integer, PersonDto> ceilingEntry = navigableMap.ceilingEntry(9);
-        assertEquals(INIT_MAP_SIZE, ceilingEntry.getKey().intValue());
+    void ceilingEntryLeastGrater() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.ceilingEntry(9);
+        //then
+        assertEquals("10", ceilingEntry.getValue());
     }
 
     @Test
-    void checkFirstEntry() {
-        Entry<Integer, PersonDto> firstEntry = navigableMap.firstEntry();
-        assertEquals(1, firstEntry.getKey().intValue());
+    void ceilingEntryKeqEquals() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.ceilingEntry(10);
+        //then
+        assertEquals("10", ceilingEntry.getValue());
     }
 
     @Test
-    void checkFloorEntry() {
-        Entry<Integer, PersonDto> foundEntry = navigableMap.floorEntry(INDEX_GREATER_THEN_MAP_SIZE);
-        assertEquals(INIT_MAP_SIZE, foundEntry.getKey().intValue());
+    void ceilingEntryNoGratedOrEqualsKey() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.ceilingEntry(12);
+        //then
+        assertNull(ceilingEntry);
+    }
+
+    //higher (strictly grater)
+
+    @Test
+    void higherEntryLeastGreatestEntry() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.higherEntry(10);
+        //then
+        assertEquals("11", ceilingEntry.getValue());
     }
 
     @Test
-    void checkHigherEntryOutOfBound() {
-        Entry<Integer, PersonDto> foundEntry = navigableMap.higherEntry(INDEX_GREATER_THEN_MAP_SIZE);
-        assertNull(foundEntry);
+    void higherEntryLeastNoGreaterKey() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.higherEntry(11);
+        //then
+        assertNull(ceilingEntry);
     }
 
+    //lowerEntry
 
     @Test
-    void checkHigherEntry() {
-        Entry<Integer, PersonDto> foundEntry = navigableMap.higherEntry(9);
-        assertEquals(INIT_MAP_SIZE, foundEntry.getKey().intValue());
+    void lowerEntryGreatestKeyLessThenSpecifiedKeyArg() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.lowerEntry(11);
+        //then
+        assertEquals("10", ceilingEntry.getValue());
     }
 
     @Test
-    void checkLowerEntry() {
-        Entry<Integer, PersonDto> foundEntry = navigableMap.lowerEntry(INDEX_GREATER_THEN_MAP_SIZE);
-        assertEquals(INIT_MAP_SIZE, foundEntry.getKey().intValue());
+    void lowerEntryGreatestKeyLessThenSpecifiedKeyArgIsNull() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.lowerEntry(10);
+        //then
+        assertNull(ceilingEntry);
     }
 
+    // floorEntry
 
-    private <T extends NavigableMap<Integer, PersonDto>> NavigableMap<Integer, PersonDto> populateWithPerson(Class<T> mapClass) throws Exception {
-        T result = mapClass.newInstance();
+    @Test
+    void floorEntryKeyEquals() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.floorEntry(10);
+        //then
+        assertEquals("10", ceilingEntry.getValue());
+    }
 
-        for (int i = 0; i < INIT_MAP_SIZE; i++) {
-            PersonDto personDto = TestUtils.buildPerson();
-            result.put(personDto.getId(), personDto);
-        }
+    @Test
+    void floorEntryTheGreatestKeyLessThenSpecifiedArg() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.floorEntry(12);
+        //then
+        assertEquals("11", ceilingEntry.getValue());
+    }
 
-        return result;
+    @Test
+    void floorEntryIsNull() {
+        //given
+        TreeMap<Integer, String> map = new TreeMap<>();
+        map.put(10, "10");
+        map.put(11, "11");
+        //when
+        Entry<Integer, String> ceilingEntry = map.floorEntry(9);
+        //then
+        assertNull(ceilingEntry);
     }
 }

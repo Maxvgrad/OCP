@@ -59,7 +59,12 @@ class PrintWriterTest {
 
     @Test
     void printInt() {
+
         printWriter.print(1);
+        printWriter.printf("%s", "arg").format("%s", "arg2");
+
+        if (printWriter.checkError()) throw new IllegalArgumentException();
+
     }
 
     @Test

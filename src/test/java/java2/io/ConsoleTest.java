@@ -46,4 +46,13 @@ class ConsoleTest {
             pass = console.readPassword("Format", "arg");
         }
     }
+
+
+    @Test
+    void loginTest() {
+        String id = console.readLine("%s", "Enter UserId:");
+        System.out.println("userid is " + id);
+        char[] pwd = console.readPassword("%s", "Enter Password :");
+        System.out.println("password is " + pwd);
+    }
 }

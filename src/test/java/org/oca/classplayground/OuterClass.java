@@ -12,6 +12,14 @@ class OuterClass {
         assertEquals(0, node.hash);
     }
 
+    @Test
+    void createInnerClass() {
+        OuterClass outerClass = new OuterClass();
+        Node node = outerClass.new Node();
+
+        new OuterClass().new Node();
+    }
+
     private class Node {
         private int hash;
     }

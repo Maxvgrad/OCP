@@ -116,6 +116,41 @@ class FunctionTest {
               .map(mov->mov.getName()).forEach((d) -> {});
     }
 
+    @Test
+    void effectivelyFinal() {
+        String name = "Bob";
+        String val;
+        Function<String, String> f = String::toUpperCase;
+
+        // when
+        val = f.apply(name);
+
+        //then
+        assertEquals("BOB", val);
+    }
+
+    class TestClass {
+        public double process(double payment, int rate) {
+            double defaultrate = 0.10;
+            if (rate > 10) {
+                defaultrate = rate;
+            }
+            class Implement {
+                int apply(double data, Double defaultRate) {
+                    BiFunction<Integer, Double, Integer> f = (x, m) -> x + (int) (x * m);
+                    return f.apply((int) data, defaultRate);
+                }
+
+                void testNotEffectivelyFinal() {
+                    //defaultrate //Not effectively final
+                }
+            }
+            Implement i = new Implement();
+            return i.apply(payment, defaultrate);
+        }
+    }
+
+
     private void accept(PersonDto person, Double id, DoubleToIntFunction converter, ObjIntConsumer<PersonDto> idSetter) {
         idSetter.accept(person, converter.applyAsInt(id));
     }

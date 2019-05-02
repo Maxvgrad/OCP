@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,11 +30,19 @@ class CollectionsTest {
     void notImplementsComparable() {
         List<Book> books = new ArrayList<>();
 
-        //Collections.sort(books);
-
         List booksNoGeneric = books;
 
         Collections.sort(booksNoGeneric);
+    }
+
+    @Test
+    void joining() {
+        //given
+        List<String> letters = Arrays.asList("j", "a", "v","a");
+        //when
+        String JAVA = letters.stream().collect(Collectors.joining(""));
+        //then
+        assertEquals("JAVA", JAVA);
     }
 
     private class Book {}

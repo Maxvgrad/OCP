@@ -149,4 +149,35 @@ class PathTest {
         Path p2 = Paths.get("z");
         assertThrows(IllegalArgumentException.class, () -> p1.relativize(p2));
     }
+
+    @Test
+    void resolveSiblingsAbsolutePath() {
+        //given
+        Path p1 = Paths.get("F:/hello/input.txt");
+        //when
+        Path p2 = p1.resolveSibling("output.txt");
+        //then
+        assertEquals("F:\\hello\\output.txt", p2.toString());
+    }
+
+    @Test
+    void resolveSiblingsRelativePath() {
+        //given
+        Path p1 = Paths.get("hello/input.txt");
+        //when
+        Path p2 = p1.resolveSibling("output.txt");
+        //then
+        assertEquals("hello\\output.txt", p2.toString());
+    }
+
+    @Test
+    void resolveSiblingsRelativePath2() {
+        //given
+        Path p1 = Paths.get("hello/input.txt");
+        //when
+        Path p2 = p1.resolveSibling("\\output.txt");
+        //then
+        assertEquals("hello\\output.txt", p2.toString());
+    }
 }
+

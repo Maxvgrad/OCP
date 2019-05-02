@@ -69,7 +69,12 @@ class FileInputStreamTest {
         }
     }
 
-
+    @Test
+    void effectivelyFinalVariable() throws Exception {
+        try (InputStream io = new FileInputStream("")) {
+            //io = new FileInputStream("");
+        }
+    }
 
     @Test
     void ch8q1() throws Exception {
